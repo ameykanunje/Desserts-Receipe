@@ -1,19 +1,31 @@
+//
+//  DessertDetailsView.swift
+//  Desserts Receipe
+//
+//  Created by Amey Kanunje on 6/29/24.
+//
+
 import SwiftUI
 
 struct DessertDetailsView: View {
-    private var dessertsViewModel: DessertDetailsViewModel
+    @StateObject private var dessertsViewModel: DessertDetailsViewModel
     let mealID: String
 
     init(mealID: String) {
         self.mealID = mealID
-        self.dessertsViewModel = DessertDetailsViewModel()
+        _dessertsViewModel = StateObject(wrappedValue: DessertDetailsViewModel())
     }
     
     var body: some View {
-        NavigationStack{
-            ScrollView{
+        NavigationStack {
+            ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    if let mealDetails = dessertsViewModel.mealDetails {
+                    if dessertsViewModel.isLoading {
+                        ProgressView("Loading...")
+                    } else if let error = dessertsViewModel.error {
+                        Text("Error: \(error.localizedDescription)")
+                            .foregroundColor(.red)
+                    } else if let mealDetails = dessertsViewModel.mealDetails {
                         // Dessert Name
                         Text(mealDetails.mealName)
                             .font(.title)
@@ -27,32 +39,28 @@ struct DessertDetailsView: View {
                                 ProgressView()
                             }
                             .frame(width: 200, height: 200)
-
                         }
                         
                         // Instructions
                         Text("Instructions:")
-                            .font(.system(size:22,weight:.bold))
+                            .font(.system(size: 22, weight: .bold))
                         Text(mealDetails.mealInstructions)
                             .font(.body)
                         
-                        
                         // Ingredients
                         Text("Ingredients:")
-                            .font(.system(size:22,weight:.bold))
-                        ForEach(getIngredients(mealDetails: mealDetails).indices, id: \.self) { index in
-                            let (ingredient, measure) = getIngredients(mealDetails: mealDetails)[index]
-                                if !ingredient.isEmpty, !measure.isEmpty {
-                                    VStack(alignment: .leading, spacing: 5) {
-                                        Text("\(ingredient) : \(measure)")
-                                            .font(.body)
-//                                        Text(measure)
-//                                            .font(.subheadline)
-                                    }
+                            .font(.system(size: 22, weight: .bold))
+                        ForEach(dessertsViewModel.getIngredients().indices, id: \.self) { index in
+                            let (ingredient, measure) = dessertsViewModel.getIngredients()[index]
+                            if !ingredient.isEmpty, !measure.isEmpty {
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text("\(ingredient) : \(measure)")
+                                        .font(.body)
+                                }
                             }
                         }
                     } else {
-                        Text("Loading...")
+                        Text("No details available")
                     }
                 }
                 .padding()
@@ -62,11 +70,6 @@ struct DessertDetailsView: View {
         .onAppear {
             dessertsViewModel.fetchDessertDetailsData(mealID: mealID)
         }
-    }
-    
-    // Function to get non-empty ingredient names
-    private func getIngredients(mealDetails: MealDetails) -> [(String, String)] {
-        return mealDetails.ingredientsWithMeasures
     }
 }
 

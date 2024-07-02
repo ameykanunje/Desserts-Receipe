@@ -1,8 +1,8 @@
 //
 //  EndPointType.swift
-//  Desserts Companion
+//  Desserts Receipe
 //
-//  Created by csuftitan on 4/4/24.
+//  Created by Amey Kanunje on 6/26/24.
 //
 
 import Foundation

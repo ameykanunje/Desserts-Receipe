@@ -1,8 +1,8 @@
 //
 //  DessertTableViewCell.swift
-//  Desserts Companion
+//  Desserts Receipe
 //
-//  Created by csuftitan on 4/3/24.
+//  Created by Amey Kanunje on 6/27/24.
 //
 
 import UIKit

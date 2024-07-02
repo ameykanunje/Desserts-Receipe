@@ -1,8 +1,8 @@
 //
 //  DessertViewModel.swift
-//  Desserts Companion
+//  Desserts Receipe
 //
-//  Created by csuftitan on 4/3/24.
+//  Created by Amey Kanunje on 6/27/24.
 //
 
 import Foundation
@@ -11,10 +11,15 @@ final class DessertViewModel{
     
     var desserts : Dessert?
     var eventHandler : ((_ event : Event)-> Void)? //data binding
+    private let apiManager: APIManagerProtocol
+
+    init(apiManager: APIManagerProtocol = APIManager.shared) {
+        self.apiManager = apiManager
+    }
     
     func fetchDessertData(){
         self.eventHandler?(.loading)
-        APIManager.shared.request(
+        apiManager.request(
             modelType: Dessert.self,
             type: EndPointItems.Desserts) { response in
                 self.eventHandler?(.stopLoading) //received the response

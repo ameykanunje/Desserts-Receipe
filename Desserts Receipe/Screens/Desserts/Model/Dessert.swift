@@ -1,13 +1,12 @@
 //
 //  Dessert.swift
-//  Desserts Companion
+//  Desserts Receipe
 //
-//  Created by csuftitan on 4/3/24.
+//  Created by Amey Kanunje on 6/27/24.
 //
 import Foundation
 
-// MARK: - Dessert
-struct Dessert: Codable {
+struct Dessert: Codable, Equatable {
     let meals: [Meals]
     
     enum CodingKeys: String, CodingKey {
@@ -15,8 +14,7 @@ struct Dessert: Codable {
     }
 }
 
-// MARK: - Meal
-struct Meals: Codable {
+struct Meals: Codable, Equatable {
     let mealName: String
     let mealImage: String
     let mealId: String
@@ -27,19 +25,4 @@ struct Meals: Codable {
         case mealId = "idMeal"
     }
 }
-
-
-
-
-
-
-//struct Dessert : Decodable{
-//    var meals : [Meals]
-//}
-//
-//struct Meals : Decodable{
-//    var mealName : String
-//    var mealImage : String
-//    var mealId : String
-//}
 

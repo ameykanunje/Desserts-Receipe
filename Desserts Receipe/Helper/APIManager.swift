@@ -1,31 +1,41 @@
 //
 //  APIManager.swift
-//  Desserts Companion
+//  Desserts Receipe
 //
-//  Created by csuftitan on 4/3/24.
+//  Created by Amey Kanunje on 6/26/24.
 //
 
 import UIKit
+
+protocol APIManagerProtocol {
+    func request<T: Decodable>(
+        modelType: T.Type,
+        type: EndPointType,
+        completion: @escaping (Result<T, DataError>) -> Void
+    )
+}
 
 enum DataError : Error{
     case invalidURL
     case invalidData
     case invalidResponse
     case network(Error?)
+    case networkError(String)
 }
 //typealias Handler = (Result<Dessert, DataError>) -> Void
 
 typealias Handler<T> = (Result<T, DataError>) -> Void
 
-final class APIManager{
-    static var shared = APIManager()
+class APIManager: APIManagerProtocol{
+    
+    static let shared = APIManager()
     
     private init(){}
     
     func request<T: Decodable>(
         modelType : T.Type,
         type : EndPointType,
-        completion : @escaping Handler<T>
+        completion : @escaping (Result<T, DataError>) -> Void
     ){
         guard let url = type.url else{
             completion(.failure(.invalidData))
